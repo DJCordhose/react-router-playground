@@ -14,13 +14,19 @@ class Spam extends React.Component {
     }
 }
 
+class Message extends React.Component {
+    render() {
+        return <div>Message: {this.props.params.id}</div>;
+    }
+}
+
 class Inbox extends React.Component {
     render() {
         return <div>
             <div>Inbox</div>
             <div>
                 Children of Inbox:
-                {this.props.children}
+                {this.props.children || "Welcome to your Inbox"}
             </div>
         </div>;
     }
@@ -51,7 +57,12 @@ const routes = {
     childRoutes: [
         {path: 'about', component: About},
         {
-            path: 'inbox', component: Inbox, childRoutes: [{path: 'spam', component: Spam}]
+            path: 'inbox',
+            component: Inbox,
+            childRoutes: [
+                {path: 'spam', component: Spam},
+                {path: 'message/:id', component: Message}
+            ]
         }
     ]
 };
