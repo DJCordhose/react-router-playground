@@ -9,7 +9,7 @@
   "license": "ISC",
   "dependencies": {
     "react": "*",
-    "react-router": "1.0.0-beta2",
+    "react-router": "1.0.0-beta3",
     "babel": "*"
   },
   "devDependencies": {

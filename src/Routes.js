@@ -2,6 +2,13 @@ import React from 'react';
 import { Link } from 'react-router';
 import HashHistory from 'react-router/lib/HashHistory';
 
+
+class NoMatch extends React.Component {
+    render() {
+        return <div>404</div>;
+    }
+}
+
 class About extends React.Component {
     render() {
         return <div>About</div>;
@@ -63,7 +70,8 @@ const routes = {
                 {path: 'spam', component: Spam},
                 {path: 'message/:id', component: Message}
             ]
-        }
+        },
+        {path: '*', component: NoMatch}
     ]
 };
 
