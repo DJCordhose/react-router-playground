@@ -4,11 +4,12 @@
   "description": "",
   "scripts": {
     "clean": "rm -rf dist/ public/dist/",
-    "devserver": "./node_modules/.bin/webpack-dev-server --devtool source-map --progress --colors --hot --content-base public"
+    "devserver": "webpack-dev-server --devtool source-map --progress --colors --hot --content-base public"
   },
   "license": "ISC",
   "dependencies": {
-    "react": "*",
+    "react": "0.14.0-beta1",
+    "react-dom": "0.14.0-beta1",
     "react-router": "1.0.0-beta3",
     "babel": "*"
   },
