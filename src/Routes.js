@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Route, Redirect, Navigation } from 'react-router';
+import { Link, Route, Redirect, History } from 'react-router';
 
 
 class NoMatch extends React.Component {
@@ -37,15 +37,20 @@ class Inbox extends React.Component {
         </div>;
     }
 }
-
+//const App = React.createClass({
+    //mixins: [ History ],
+    //mixins: [Navigation],
+//https://github.com/rackt/history/blob/master/docs/GettingStarted.md
 class App extends React.Component {
-    static get contextTypes() {
-        return {
-            router: React.PropTypes.object.isRequired
-        };
-    }
+    //static get contextTypes() {
+    //    return {
+    //        router: React.PropTypes.object.isRequired
+    //    };
+    //}
     gotoAbout() {
-      this.context.router.transitionTo('/about');
+        this.context.history.pushState(null, '/about');
+        this.context.history.replaceState(null, '/about');
+        //this.history.transitionTo('/about');
     }
     render() {
       const messageId = 48;
@@ -64,20 +69,27 @@ class App extends React.Component {
                     {this.props.children}
                 </div>
                 <div onClick={this.gotoAbout.bind(this)}>Go to About</div>
-                <div onClick={() => this.context.router.replaceWith('/inbox')}>Go to Inbox without creating a new history entry</div>
-                <div onClick={() => this.context.router.goBack()}>Go back</div>
+                <div onClick={() => this.context.history.replaceState(null, '/inbox')}>Go to Inbox without creating a new history entry</div>
+                <div onClick={() => this.context.history.goBack()}>Go back</div>
             </div>
         )
     }
-}
+}//);
+App.contextTypes = {
+    history: React.PropTypes.object.isRequired
+};
+
+
 let loggedIn = false;
 
 // http://rackt.github.io/react-router/tags/v1.0.0-beta3.html#Navigation
 const Login = React.createClass({
-   mixins: [Navigation],
+    mixins: [ History ],
+   //mixins: [Navigation],
    login() {
        loggedIn = true;
-       this.transitionTo('/inbox/spam');
+       this.history.replaceState(null, '/inbox/spam');
+       //this.transitionTo('/inbox/spam');
    },
 
    render() {
@@ -118,49 +130,49 @@ const Login = React.createClass({
 // }
 
 
-function requireAuth(nextState, transition) {
+function requireAuth(nextState, replaceState) {
     if (!loggedIn) {
-        transition.to('/login')
+        replaceState(null, '/login');
     }
 }
 
 // TODO:
-// - Routes als React-Komponenten
 // - Step by step creating a login
 
 
-const routes = (<Route path="/" component={App}>
-    <Route path="about" component={About}/>
-    <Route path="login" component={Login}/>
-    <Route path="inbox" component={Inbox}>
-        <Route path="spam"
-               component={Spam}
-               onEnter={requireAuth}
-            />
-        <Route path="message/:id" component={Message}/>
-    </Route>
-    <Route path="*" component={NoMatch}/>
-
-</Route>);
+//const routes = (<Route path="/" component={App}>
+//    <Route path="about" component={About}/>
+//    <Route path="login" component={Login}/>
+//    <Route path="inbox" component={Inbox}>
+//        <Route path="spam"
+//               component={Spam}
+//               onEnter={requireAuth}
+//            />
+//        <Route path="message/:id" component={Message}/>
+//    </Route>
+//    <Route path="*" component={NoMatch}/>
+//
+//</Route>);
 
 // OR
 
-//const routes = {
-//    path: '/',
-//    component: App,
-//    childRoutes: [
-//        {path: 'about', component: About},
-//        {path: 'login', component: Login},
-//        {
-//            path: 'inbox',
-//            component: Inbox,
-//            childRoutes: [
-//                {path: 'spam', component: Spam, onEnter: requireAuth},
-//                {path: 'message/:id', component: Message}
-//            ]
-//        },
-//        {path: '*', component: NoMatch}
-//    ]
-//};
+const routes = {
+    path: '/',
+    component: App,
+    childRoutes: [
+        {path: 'about', component: About},
+        {path: 'login', component: Login},
+        {
+            path: 'inbox',
+            component: Inbox,
+            childRoutes: [
+                {path: 'spam', component: Spam, onEnter: requireAuth},
+                //{path: 'message', component: Message},
+                {path: 'message(/:id)', component: Message}
+            ]
+        },
+        {path: '*', component: NoMatch}
+    ]
+};
 
 export default routes;

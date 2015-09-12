@@ -8,9 +8,10 @@
   },
   "license": "ISC",
   "dependencies": {
-    "react": "0.14.0-beta1",
-    "react-dom": "0.14.0-beta1",
-    "react-router": "1.0.0-beta3",
+    "react": "0.14.0-rc1",
+    "react-dom": "0.14.0-rc1",
+    "react-router": "1.0.0-rc1",
+    "history": "^1.9.0",
     "babel": "*"
   },
   "devDependencies": {
